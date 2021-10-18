@@ -1,5 +1,6 @@
 #include <SPI.h>
 #include <WiFiNINA.h>
+#include <ArduinoHttpClient.h>
 #include <ArduinoJson.h>
 
 const char* ssid = "YOUR_SSID";
@@ -15,18 +16,16 @@ void setup() {
 void loop() {
  // Check WiFi Status
  if (WiFi.status() == WL_CONNECTED) {
-   HTTPClient http;  //Object of class HTTPClient
-   http.begin("http://yourip/api/Home/GetAllApp");
-   int httpCode = http.GET();
+     //Object of class HTTPClient
+   WiFi.begin("http://yourip/api/Home/GetAllApp");
+   int httpCode = Client.get();
    //Check the returning code                                                                  
    if (httpCode > 0) {
      // Get the request response payload
-     String payload = http.getString();
+     String payload = http.responseBody();
      // TODO: Parsing
      Serial.println(payload);
    }
-   http.end();   //Close connection
+   http.stop();   //Close connection
  }
- // Delay
- delay(3000);
 }
